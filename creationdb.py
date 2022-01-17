@@ -30,5 +30,6 @@ def populate():
 
 
 if __name__ == '__main__':
+    create_bot_database()
     Base.metadata.create_all(engine)
     populate()
