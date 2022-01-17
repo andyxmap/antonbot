@@ -9,10 +9,10 @@ import schedule
 import time
 import threading
 from repository import insert_user,check_user,getadmins,update_user
-
+import os
 
 #bot_token = '1949868792:AAGGBvkbU8K8lxtF8tx9xkDDmnBvypbOUFA'
-bot_token = '5054062105:AAF5esPk1rzrbjpcPmSWn11erWtr_Mv_GY4'
+bot_token = os.environ['TOKEN']
 bot = telebot.TeleBot(bot_token)
 
 class MyException(ExceptionHandler):

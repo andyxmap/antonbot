@@ -2,9 +2,9 @@ from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 
 from models import User
-
+import os
 #global engine for export session object
-engine = create_engine('postgresql://postgres:dariela1109@localhost:5433/antbot',echo=False,pool_pre_ping=True)
+engine = create_engine(os.environ['db'],echo=False,pool_pre_ping=True)
 
 def use_session():
     return sessionmaker(bind=engine)

@@ -3,13 +3,13 @@ from sqlalchemy import create_engine
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker, scoped_session, relationship
 
-
+import os
 Base = declarative_base()
 
 # Disabling same thread checking for different users being able to watch all products
 # engine = create_engine('sqlite:///db.sqlite?check_same_thread=False',echo=False)
 
-engine = create_engine('postgresql://postgres:dariela1109@localhost:5433/antbot',echo=False,pool_pre_ping=True)
+engine = create_engine(os.environ['db'],echo=False,pool_pre_ping=True)
 
 
 class User(Base):
