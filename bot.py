@@ -4,26 +4,28 @@ import logging
 from models import User, Producto, session
 from utils import *
 from telebot import types, util, apihelper,ExceptionHandler
-
+import traceback
 import schedule
 import time
 import threading
-from repository import insert_user,check_user,getadmins,update_user
+from repository import insert_user, check_user, getadmins, update_user, getusuariosbaneados,getalluser
 import os
 
-#bot_token = '1949868792:AAGGBvkbU8K8lxtF8tx9xkDDmnBvypbOUFA'
 bot_token = os.environ['TOKEN']
 bot = telebot.TeleBot(bot_token)
+logger = telebot.logger
+telebot.logger.setLevel(logging.INFO)
 
 class MyException(ExceptionHandler):
 
     def handle(self, exception):
-        bot.send_message(dev,str(exception))
+        tb = traceback.format_exc()
+        logger.exception(exception)
+        bot.send_message(dev,tb)
         return super().handle(exception)
 
 bot.exception_handler = MyException
-logger = telebot.logger
-telebot.logger.setLevel(logging.INFO)
+
 
 ####### Variables de ayuda ##############
 user_dict_id_aux = {}
@@ -64,7 +66,7 @@ def is_dev(message):
         return False
 
 def is_not_baned(message):
-    if message.from_user.id not in get_usuarios_baneados():
+    if message.from_user.id not in getusuariosbaneados():
         return True
     else:
         bot.send_message(message.from_user.id,"Lo sentimos, usted esta baneado de nuestro sistema.")
@@ -152,6 +154,11 @@ def demote_admin(message):
 ################## ################## ###################
 
 ################ Comandos de admins ######################
+@bot.message_handler(func=is_admin , commands=['userinfo'])
+def getuserinfo(message):
+    users,session = getalluser()
+    for user in users:
+        bot.send_message(dev,str(user))
 
 @bot.message_handler(func=is_admin , commands=['anunciar'])
 def anunciar(message):
@@ -364,7 +371,7 @@ def yes_callback(call: types.CallbackQuery):
        answer = '{0} Bienvenido a TraigoBot'.format(call.from_user.username)
        bot.answer_callback_query(callback_query_id=call.id, text=answer,show_alert=True)
        m = bot.send_message(call.from_user.id, 'Necesitamos registrar algunos datos.Nos gustaria conocer sobre usted 👥. Escriba su nombre completo: ')
-       user_dict_id_aux[call.from_user.id] = {'nombrecompleto': '', 'direccion': '', 'tg_id':call.from_user.id, 'carnet': '',
+       user_dict_id_aux[call.from_user.id] = {'nombrecompleto': '', 'direccion': '', 'tg_id':call.from_user.id,
                                     'numerotelefono': ''}
        bot.register_next_step_handler(m,process_name_step)
 
@@ -379,7 +386,7 @@ def no_callback(call: types.CallbackQuery):
 def register_welcome(message):
     text = f'Nos gustaria conocer sobre usted 👥. Escriba su nombre completo: '
     user_id = message.from_user.id
-    user_dict_id_aux[user_id] = {'nombrecompleto':'','direccion':'','tg_id':user_id,'carnet':'','numerotelefono':''}
+    user_dict_id_aux[user_id] = {'nombrecompleto':'','direccion':'','tg_id':user_id,'numerotelefono':''}
     bot.reply_to(message, text)
     bot.register_next_step_handler(message,process_name_step)
 
@@ -413,27 +420,12 @@ def process_telefono_step(message):
         bot.register_next_step_handler(msg, process_direccion_step)
     else:
         user_dict_id_aux[user_id]['numerotelefono'] = telefono
-        msg = bot.reply_to(message, 'Por favor introduzca su numero de carnet: ')
-        bot.register_next_step_handler(msg, process_id_step)
-
-def process_id_step(message):
-    user_id = message.from_user.id
-    id = message.text
-
-    if not str(id).isdigit() and len(str(id)) < 11 or len(str(id)) > 11:
-        msg = bot.reply_to(message, 'El numero de carnet no puede contener letras y no puede exceder 11 digitos Por favor introduzca su numero de carnet: ')
-        bot.register_next_step_handler(msg, process_id_step)
-    else:
-        user_dict_id_aux[user_id]['carnet'] = id
-        msg = bot.reply_to(message, 'Gracias por la informacion emoji. Si desea cambiar editar su informacion use el comando /register')
+        msg = bot.reply_to(message,
+                           'Gracias por la informacion 😁. Si desea cambiar editar su informacion use el comando /register')
 
         user_id = message.from_user.id
         update_user(user_dict_id_aux[user_id])
         init_menu_principal(message)
-
-
-
-
 
 ####################Fin reconocimiento para el usuario##############
 
@@ -1316,7 +1308,7 @@ def cancelar_edicion(message,producto):
 ######## Para mostrar señales y conocer en caso de apagarse #######
 
 def inform():
-    bot.send_message(dev,"I'm still working.")
+    bot.send_message(dev,"Sigo trabajando dev recuerda revisar los log y las exepciones en tu chat")
 
 def keep_informing():
 
@@ -1325,7 +1317,7 @@ def keep_informing():
         time.sleep(1)
 
 schedule.every().day.at("18:00").do(inform)
-
+schedule.every().hour.do(inform)
 schedule.every().day.at("10:00").do(inform)
 
 informer = threading.Thread(target=keep_informing)
@@ -1335,6 +1327,5 @@ informer.start()
 
 
 bot.infinity_polling(non_stop= True,allowed_updates=util.update_types)
-
 schedule.run_pending()
 

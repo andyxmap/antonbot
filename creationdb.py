@@ -21,14 +21,30 @@ def populate():
         'alias': ' ',
         'baneado': False,
         'admin': True,
-        'nombrecompleto': '',
-        'carnet': '',
-        'direccion': '',
+        'nombrecompleto': 'Andy Hernandez Albulquerque',
+        'direccion': 'La Habana',
         'numerotelefono': '58878991',
     }
+    admin_info = {
+        'tg_id': '628775092',
+        'carrito': [],
+        'nombre': 'Dayan',
+        'alias': '@Anthond',
+        'baneado': False,
+        'admin': True,
+        'nombrecompleto': 'Dayan Antonio Perez',
+        'direccion': '',
+        'numerotelefono': '55244400',
+    }
+
     insert_user(dev_info)
+    insert_user(admin_info)
 
 
 if __name__ == '__main__':
-    Base.metadata.create_all(engine)
-    populate()
+    try:
+     Base.metadata.create_all(engine)
+     populate()
+     print('Database create and populate')
+    except Exception as e:
+        print(e.__str__())

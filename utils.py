@@ -208,19 +208,17 @@ def welcome_message():
       return '''```
       Términos y condiciones 
 
-      TraiGo! Es un servicio Delivery (entregas a domicilio) que pretende conectar a los mejores proveedores de vienes y servicios con Usted mediante su proyecto de tienda virtual.
+TraiGo! Es una tienda online con el único objetivo facilitar la experiencia de compra de nuestros clientes y a la vez está sea gratificante.
 
-      Nos eximimos de toda responsabilidad legal sobre la procedencia o condiciones de venta, aún así trataremos dentro de posible de garantizar ofertas con trasparencia lícita y de calidad.
+Por tanto, No vendemos a sobre precio y para evitar el acaparamiento en nuestra tienda cada cliente dispone de una capacidad de compra razonable que le permita satisfacer sus necesidades sin que esta afecte a terceros. Dicha capacidad de compra irá aumentando según nuestra disponibilidad de productos.
 
-      Toda persona, natural o jurídica que desee contratar nuestro servicio puede hacerlo por las vías que se ponen a su disposición.
+Pronto iremos agregando más opciones a nuestro servicio para que usted quede aún más complacido/a
 
-      La selección de las ofertas a publicar se hará bajo criterios propios de nuestro equipo teniendo en cuenta, parámetros como, trasparencia, legalidad, precios accesibles etc.
+Para más información y estar al tanto de nuestras ofertas síganos en nuestro canal https://t.me/TraiGoCanal
 
-      TraiGo no se hace responsable de devoluciones ni ofrece garantías. Esas cuestiones las determinan nuestros proveedores y serán debidamente publicadas en nuestra plataforma como descripción del producto. 
+Si tiene alguna duda o sugerencia contáctenos a través del siguiente usuario @Anthond
 
-      Nuestro deber es garantizar una experiencia única a la hora de hacer su compra, sin precios abusivos, con rapidez y calidad. 
-
-      ¡BIENVENIDOS!
+Saludos
     ```'''
 
 def comandos_info():

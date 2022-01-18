@@ -8,9 +8,9 @@ Base = declarative_base()
 
 # Disabling same thread checking for different users being able to watch all products
 # engine = create_engine('sqlite:///db.sqlite?check_same_thread=False',echo=False)
-
-engine = create_engine(os.environ['db'],echo=False,pool_pre_ping=True)
-
+uri = str(os.environ['DATABASE_URL'])
+uri = uri.replace("postgres://","postgresql://",1)
+engine = create_engine(uri,echo=True,pool_pre_ping=True)
 
 class User(Base):
     __tablename__ = 'user'
@@ -23,7 +23,6 @@ class User(Base):
     baneado = Column(Boolean)
     admin = Column(Boolean)
     nombrecompleto = Column(String)
-    carnet = Column(String)
     direccion = Column(String)
     numerotelefono = Column(String)
 
@@ -35,7 +34,6 @@ Alias -> @{self.alias}
 T_id -> {self.tg_id}
 Ban -> {self.baneado}
 Nombre Completo -> {self.nombrecompleto}
-Carnet -> {self.carnet}
 Direccion -> {self.direccion}
 Numero Telefono -> {self.numerotelefono}
 
@@ -57,7 +55,6 @@ Numero Telefono -> {self.numerotelefono}
             'alias': self.alias,
             'baneado': self.baneado,
             'nombrecompleto': self.nombrecompleto,
-            'carnet': self.carnet,
             'control': self.control,
             'state': self.state,
         }

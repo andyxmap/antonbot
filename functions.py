@@ -28,7 +28,7 @@ def init_utils():
             dev=1671749074,
             categorias='Alimentos 🥩 Aseo 🧼 Útiles del hogar 🏠 Otros 🎰',
             p_mostrados=3,
-            owner=1671749074,
+            owner=628775092,
             image_secs='Nombre ✍️ Detalles 📋 Precio 💰 Limite 📦 Foto 🖼 Regresar ↩️',
             response_waiting=500
         )

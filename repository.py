@@ -4,7 +4,9 @@ from sqlalchemy.orm import sessionmaker
 from models import User
 import os
 #global engine for export session object
-engine = create_engine(os.environ['db'],echo=False,pool_pre_ping=True)
+uri = str(os.environ['DATABASE_URL'])
+uri = uri.replace("postgres://","postgresql://",1)
+engine = create_engine(uri,echo=True,pool_pre_ping=True)
 
 def use_session():
     return sessionmaker(bind=engine)
@@ -35,19 +37,21 @@ def get_user_by_tg_id(id):
 
     return user,session
 
-def get_all_user():
+def getalluser():
 
     session = use_session()()
     users = session.query(User).all()
 
     return users,session
 
-def get_usuarios_baneados():
-     users = []
+def getusuariosbaneados():
+
      session = use_session()()
      users = session.query(User).filter_by(baneado = True).all()
+     users = [user.tg_id for user in users]
+     session.close()
 
-     return users,session
+     return users
 
 def getadmins():
 
