@@ -20,11 +20,10 @@ class MyException(ExceptionHandler):
 
     def handle(self, exception):
         tb = traceback.format_exc()
-        logger.exception(exception)
         bot.send_message(dev,tb)
-        return super().handle(exception)
+        return True
 
-bot.exception_handler = MyException
+bot.exception_handler = MyException()
 
 
 ####### Variables de ayuda ##############
@@ -273,33 +272,7 @@ def comandos(message):
 
     bot.send_message(message.from_user.id,sms,parse_mode="MarkdownV2")
 
-@bot.message_handler(func=is_admin, commands=['limite'])
-def set_limite(message):
 
-    if is_msg_too_old(message,bot,waiting):
-        return
-
-    global p_mostrados
-    sms = message.text.replace("/limite","")
-
-    try:
-        limite = int(sms)
-    except ValueError:
-        bot.send_message(message.from_user.id,"El límite debe ser un número.")
-        return
-    
-    if limite <= 0:
-        bot.send_message(message.from_user.id,"El límite debe ser un número positivo mayor que 0.")
-        return
-
-    utils = init_utils()
-    utils.p_mostrados = limite
-
-
-    session.commit()
-
-    p_mostrados = limite
-    bot.send_message(message.from_user.id,f"Limite establecido a {p_mostrados} productos")
 
 @bot.message_handler(func=is_admin, commands=['waiting'])
 def set_espera(message):
@@ -449,13 +422,9 @@ def validate(message):
             menu = get_productos_menu()
             empty_k = types.ReplyKeyboardRemove()
             msg = bot.send_message(message.from_user.id,"En esta categoria tenemos los siguientes productos:",reply_markup= menu)
-            
-            index = 0
-            limit = p_mostrados
-            for producto in productos:
-                
-                if limit == 0:
-                    break
+
+
+            for (index,producto) in enumerate(productos):
 
                 sms = hacer_sms_producto(producto)
 
@@ -469,13 +438,13 @@ def validate(message):
                 else:
                     markup = get_inline_b(producto,user,length,cantidad,index,False)
 
-                index = index + 1
+
 
                 photo = producto.imagen
 
                 bot.send_photo(message.from_user.id,photo= photo, caption = sms,reply_markup=markup, parse_mode="MarkdownV2") 
-                
-                limit = limit - 1
+
+
 
         else:
             bot.send_message(message.from_user.id,"Por el momento no hay productos en esta categoria")
