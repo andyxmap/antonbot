@@ -126,9 +126,6 @@ def get_inline_b(producto,user,len,cantidad,index,admin):
 
       categoria = producto.categoria
 
-      length = get_cantidad_en_categoria(categoria) - 1
-
-      print(f'Showing index :{index} , length: {length}')
 
       if cantidad > 0 :
             emoji_check = "✅"
@@ -136,8 +133,6 @@ def get_inline_b(producto,user,len,cantidad,index,admin):
             emoji_check = "☑️"
 
       emoji_carrito = "🛒"
-      emoji_sgt = "➡️"
-      emoji_ant = "⬅️"
 
       # agregando botonera
       comprarButton = types.InlineKeyboardButton(
@@ -153,38 +148,6 @@ def get_inline_b(producto,user,len,cantidad,index,admin):
       keyboard.append([comprarButton])
       keyboard.append([descontar_carritoButton])
 
-      sgte = False
-      ant = False
-
-      if index < length:   
-            sgte = True
-      
-      if index > 0 or (index == length and length!=0):
-            ant = True
-           
-      arrows = []
-
-      if ant :
-
-            antButton = types.InlineKeyboardButton(
-                        text = f'{emoji_ant}',
-                        callback_data=f'prev_{index}_{categoria}'
-                  )
-            
-            arrows.append(antButton)
-
-      if sgte:
-
-            sgteButton = types.InlineKeyboardButton(
-                        text = f'{emoji_sgt}',
-                        callback_data=f'next_{index}_{categoria}'
-                  )
-            
-            arrows.append(sgteButton)
-      
-      if arrows != []:
-            keyboard.append(arrows)      
-  
       if admin:
 
             editarButton = types.InlineKeyboardButton(
