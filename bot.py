@@ -550,7 +550,7 @@ A continuacion los productos de su carrito:
                 
                 if user.alias:
                     intro_a =f'''```
-El usuario @{user.alias} con nombre {user.nombrecompleto} con identificacion {user.carnet} desea hacer
+El usuario @{user.alias} con nombre {user.nombrecompleto} desea hacer
 una compra.
 La direccion para la entrega es {user.direccion}
 Si desea localizar al usuario que realizo puede llamarlo a este numero {user.numerotelefono}
@@ -559,7 +559,7 @@ A continuacion los productos de su carrito:
 
                 else:
                     intro_a =f'''```
-El usuario @{user.alias} con nombre {user.nombrecompleto} con identificacion {user.carnet} desea hacer
+El usuario @{user.alias} con nombre {user.nombrecompleto} desea hacer
 una compra.
 La direccion para la entrega es {user.direccion}
 Si desea localizar al usuario que realizo puede llamarlo a este numero {user.numerotelefono}
